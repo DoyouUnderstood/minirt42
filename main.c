@@ -1,52 +1,12 @@
 #include "parse.h"
 
 
-/*          A FAIRE 
-
-    !!!!    Verifier les intputs et les stockers dans les structs. !!!!
-
-    fonctions parse_all qui va appeller toute 
-    les fonctions specifique au objet present dans minirt.rt (parseA, parseC,
-    parseL, etc ..)
-
-    faire les fonctions specifique.
-    faire les fonctions qui verifie l'ambien light. le rbg .les coord xyz etc .
-    stocker toute les infos 
-
-*/
-
-
-int is_delimiter(char c, const char *delimiters) 
-{
-    while (*delimiters) {
-        if (c == *delimiters) {
-            return 1;
-        }
-        delimiters++;
-    }
-    return 0;
-}
-
-void skip_to_next(char **str, const char *delimiters) 
-{
-    while (**str && !is_delimiter(**str, delimiters)) {
-        (*str)++;
-    }
-}
-
-void skip_space(char **str)
-{
-    while (**str && **str == ' ')
-        (*str)++;
-}
-
-
-static bool in_range(double start, double end, double value)
+bool in_range(double start, double end, double value)
 {
     return (value >= start && value <= end);
 }
 
-static int ft_atoi_rgb(char **str)
+int ft_atoi_rgb(char **str)
 {
     int res = 0;
     while (**str >= '0' && **str <= '9')
@@ -57,7 +17,7 @@ static int ft_atoi_rgb(char **str)
     return (res);
 }
 
-static bool parse_rgb(char **str, int *value)
+bool parse_rgb(char **str, int *value)
 {
     if (**str == '\0' || (**str == ',' && *(*str + 1) == '\0'))
         return (false);
@@ -73,11 +33,11 @@ bool rgb(char *str, t_rgb *color)
     int g;
     int b;
 
-    if (!parse_rgb(&str, &r) || !in_range(r, 0, 255))
+    if (!parse_rgb(&str, &r) || !in_range(0, 255, r))
         return (false);
-    if (!parse_rgb(&str, &g) || !in_range(g, 0, 255))
+    if (!parse_rgb(&str, &g) || !in_range(0, 255, g))
         return (false);
-    if (!parse_rgb(&str, &b) || !in_range(b, 0, 255))
+    if (!parse_rgb(&str, &b) || !in_range(0, 255, b))
         return (false);
     if (*str != '\0')
         return (false);
@@ -89,34 +49,22 @@ bool rgb(char *str, t_rgb *color)
 }
 
 
-bool ambient_check(char **str, double *intensity) {
-    // Utilisation hypothétique de ft_atod pour lire l'intensité
-    ft_atod(*str, intensity); // Supposons que cela ne modifie pas *str directement
-
-    // Avance manuellement *str pour trouver le début des données RGB
-    while (**str && **str != ' ' && **str != ',') 
-        (*str)++;
-    if (**str) 
-        (*str)++; // Avance au-delà de l'espace ou de la virgule trouvé
-
-    // Vérification de l'intensité
+bool ambient_check(char **str, double *intensity) 
+{
+    ft_atod(*str, intensity);
     if (!in_range(0.0, 1.0, *intensity)) {
         return false;
     }
-    
     return true;
 }
 
 
-bool parse_ambient_lightning(char *str, t_amb_light *light) 
+bool parse_ambient_lightning(char **str, t_amb_light *light) 
 {
-    skip_to_next(&str, " ");
-    if (!ambient_check(&str, &(light->intensity))) {
+    if (!ambient_check(&str[1], &(light->intensity))) {
         return false;
     }
-    skip_to_next(&str, " ");
-    printf("string :%s\n", str);
-    if (!rgb(str, &(light->color))) {
+    if (!rgb(str[2], &(light->color))) {
         return false;
     }
     return true;

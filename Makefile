@@ -8,7 +8,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
 # Fichiers source
-SRCS = minirt.c ft_str_to_double.c ft_split.c print.c parse_utils.c parse.c main.c
+SRCS = minirt.c ft_str_to_double.c ft_split.c print.c parse_utils.c parse.c main.c ft_strtod.c
 
 # Commande de compilation
 $(NAME):

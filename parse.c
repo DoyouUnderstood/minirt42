@@ -16,55 +16,62 @@
 // }
 
 
-int parse_cylinder(char *str, t_cyl *cyl) 
-{
-    char **parts = ft_split(str, ' ');
-    if (!parts) 
-        return 0;
+// int parse_cylinder(char *str, t_cyl *cyl) 
+// {
+//     char **parts = ft_split(str, ' ');
+//     if (!parts) 
+//         return 0;
 
-    int success = parse_cylinder_details(parts, cyl) &&
-                  parse_cylinder_color(parts[5], cyl);
+//     int success = parse_cylinder_details(parts, cyl) &&
+//                   parse_cylinder_color(parts[5], cyl);
  
-    ft_free_split(parts);
-    return success ? 1 : 0;
-}
+//     ft_free_split(parts);
+//     return success ? 1 : 0;
+// }
 
-int parse_camera(char *line, t_camera *camera)
+bool parse_camera(char **parts, t_camera *camera)
 {
-    char    **parts;
-    int     valid_parse = 1;
-
-    parts = ft_split(line, ' ');
-    if (!parts)
-        return (0);
-
-    if (!parse_vec3(parts[1], &camera->pos))
-        valid_parse = 0;
-
+    double fov;
     t_vec3 orientation;
-    if (valid_parse && parse_vec3(parts[2], &orientation))
+    if (!parse_vec3(parts[1], &camera->pos))
+        return (false);
+    if (parse_vec3(parts[2], &orientation))
     {
         if (!validate_orientation(&orientation))
-            valid_parse = 0;
+            return (false);
         else
             camera->orientation = orientation;
     }
     else
-        valid_parse = 0;
-
-    double fov;
-    if (valid_parse && ft_str_to_double(parts[3], &fov))
     {
-        if (fov <= 0.0 || fov > 180.0)
-            valid_parse = 0;
-        else
-            camera->fov = fov;
+        printf("FDSFDSFDS");
+        return (false);
     }
-    else
-        valid_parse = 0;
-    ft_free_split(parts);
-    return (valid_parse);
+    fov = str_to_double(parts[3]);
+    printf("%s == %f\n", parts[3], fov);
+    camera->fov = fov;
+    return (true);
 }
+
+int parse_vec3(char *str, t_vec3 *vec)
+{
+    int parsed = 0;
+    char *end_ptr;
+
+    vec->x = strtod(str, &end_ptr);
+    parsed += (str != end_ptr) && (*end_ptr == ',');
+    str = end_ptr + 1;
+
+    vec->y = strtod(str, &end_ptr);
+    parsed += (str != end_ptr) && (*end_ptr == ',');
+    str = end_ptr + 1;
+
+    vec->z = strtod(str, &end_ptr);
+    parsed += (str != end_ptr);
+
+    return (parsed == 3);
+}
+
 
 int parse_plane(char *str, t_plane *plane)
 {
@@ -101,7 +108,7 @@ int parse_sphere(char *str, t_sphere *sphere)
         return 0;
     }
 
-    if (!ft_str_to_double(parts[2], &sphere->diameter) || sphere->diameter <= 0.0)
+    if (!ft_atod(parts[2], &sphere->diameter) || sphere->diameter <= 0.0)
     {
         ft_free_split(parts);
         return 0;
@@ -110,7 +117,7 @@ int parse_sphere(char *str, t_sphere *sphere)
     for (int i = 0; i < 3; ++i)
     {
         double temp;
-        if (!ft_str_to_double(color_parts[i], &temp) || temp < 0 || temp > 255)
+        if (!ft_atod(color_parts[i], &temp) || temp < 0 || temp > 255)
         {
             ft_free_split(parts);
             ft_free_split(color_parts);
@@ -124,38 +131,16 @@ int parse_sphere(char *str, t_sphere *sphere)
     return 1;
 }
 
-int parse_light(char *str, t_light *light)
+bool parse_light(char **parts, t_light *light)
 {
-    char **parts = ft_split(str, ' ');
-    if (!parts)
-        return 0;
-
     if (!parse_vec3(parts[1], &light->position))
-    {
-        ft_free_split(parts);
-        return 0;
-    }
-
-    if (!ft_str_to_double(parts[2], &light->brightness) || light->brightness < 0.0 || light->brightness > 1.0)
-    {
-        ft_free_split(parts);
-        return 0;
-    }
-
-    char **color_parts = ft_split(parts[3], ',');
-    for (int i = 0; i < 3; ++i)
-    {
-        double temp;
-        if (!ft_str_to_double(color_parts[i], &temp) || temp < 0 || temp > 255)
-        {
-            ft_free_split(parts);
-            ft_free_split(color_parts);
-            return 0;
-        }
-        light->color[i] = (int)temp;
-    }
-
-    ft_free_split(parts);
-    ft_free_split(color_parts);
-    return 1;
+        return (false);
+    write(1, "c", 1);
+    if (!ft_atod(parts[2], &light->brightness))
+        return (false);
+    if (!valid_bright(light->brightness))
+        return (false);
+    if (!rgb(parts[3], &light->color))
+        return (false);
+    return (true);
 }

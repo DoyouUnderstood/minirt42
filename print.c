@@ -20,7 +20,6 @@ void print_light(const t_light *light)
     printf("Light:\n");
     print_vec3(light->position);
     printf("\nBrightness: %.2f\n", light->brightness);
-    printf("Color: (R: %d, G: %d, B: %d)\n", light->color[0], light->color[1], light->color[2]);
 }
 
 void print_sphere(const t_sphere *sphere)

@@ -82,14 +82,14 @@ void    ft_free_split(char **array)
     free(array);
 }
 
-int parse_vec3(char *str, t_vec3 *vec)
-{
-    int parsed = 0;
-    parsed += ft_atod((const char *)&str, &vec->x) && *str++ == ',';
-    parsed += ft_atod((const char *)&str, &vec->y) && *str++ == ',';
-    parsed += ft_atod((const char *)&str, &vec->z);
-    return (parsed == 3);
-}
+// int parse_vec3(char *str, t_vec3 *vec)
+// {
+//     int parsed = 0;
+//     parsed += ft_atod((const char *)&str, &vec->x) && *str++ == ',';
+//     parsed += ft_atod((const char *)&str, &vec->y) && *str++ == ',';
+//     parsed += ft_atod((const char *)&str, &vec->z);
+//     return (parsed == 3);
+// }
 
 int validate_orientation(const t_vec3 *orientation)
 {
@@ -108,37 +108,44 @@ double parse_fov(char *str)
     return (fov);
 }
 
-int parse_rgb(char **color_parts, t_rgb *color)
+// int parse_rgb(char **color_parts, t_rgb *color)
+// {
+//     for (int i = 0; i < 3; ++i)
+//     {
+//         double temp;
+//         if (!ft_str_to_double(color_parts[i], &temp) || temp < 0 || temp > 255)
+//         {
+//             return 0; // Échec de la conversion ou valeur hors limites
+//         }
+//         // Assigner les valeurs converties à la structure de couleur
+//         if (i == 0) color->r = (int)temp;
+//         if (i == 1) color->g = (int)temp;
+//         if (i == 2) color->b = (int)temp;
+//     }
+//     return 1; // Succès
+// }
+
+
+// int parse_cylinder_details(char **parts, t_cyl *cyl) {
+//     if (!parse_vec3(parts[1], &cyl->center) ||
+//         !parse_vec3(parts[2], &cyl->orientation) ||
+//         !ft_str_to_double(parts[3], &cyl->diameter) || cyl->diameter <= 0 ||
+//         !ft_str_to_double(parts[4], &cyl->height) || cyl->height <= 0) {
+//         return 0;
+//     }
+//     return 1;
+// }
+
+// int parse_cylinder_color(char *part, t_cyl *cyl) {
+//     char **color_parts = ft_split(part, ',');
+//     int success = parse_rgb(color_parts, &cyl->color);
+//     ft_free_split(color_parts);
+//     return success;
+// }
+
+bool valid_bright(double bright)
 {
-    for (int i = 0; i < 3; ++i)
-    {
-        double temp;
-        if (!ft_str_to_double(color_parts[i], &temp) || temp < 0 || temp > 255)
-        {
-            return 0; // Échec de la conversion ou valeur hors limites
-        }
-        // Assigner les valeurs converties à la structure de couleur
-        if (i == 0) color->r = (int)temp;
-        if (i == 1) color->g = (int)temp;
-        if (i == 2) color->b = (int)temp;
-    }
-    return 1; // Succès
-}
-
-
-int parse_cylinder_details(char **parts, t_cyl *cyl) {
-    if (!parse_vec3(parts[1], &cyl->center) ||
-        !parse_vec3(parts[2], &cyl->orientation) ||
-        !ft_str_to_double(parts[3], &cyl->diameter) || cyl->diameter <= 0 ||
-        !ft_str_to_double(parts[4], &cyl->height) || cyl->height <= 0) {
-        return 0;
-    }
-    return 1;
-}
-
-int parse_cylinder_color(char *part, t_cyl *cyl) {
-    char **color_parts = ft_split(part, ',');
-    int success = parse_rgb(color_parts, &cyl->color);
-    ft_free_split(color_parts);
-    return success;
+    if (bright >= 0 && bright <= 1)
+        return (true);
+    return (false);
 }

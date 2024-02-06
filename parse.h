@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 typedef struct s_rgb
 {
@@ -29,7 +31,7 @@ typedef struct s_light
 {
     t_vec3 position;
     double brightness;
-    int color[3];
+    t_rgb color;
 } t_light;
 
 typedef struct s_camera
@@ -100,18 +102,22 @@ void print_light(const t_light *light);
 void print_sphere(const t_sphere *sphere);
 void print_plane(const t_plane *plane);
 void print_cylinder(const t_cyl *cyl);
+void ft_print_double_array(char **ptr);
+
 
 
 /* =========== Parseur ========== */
 int parse_cylinder(char *str, t_cyl *cyl);
-int parse_camera(char *line, t_camera *camera);
+bool parse_camera(char **line, t_camera *camera);
 int parse_plane(char *str, t_plane *plane);
 int parse_sphere(char *str, t_sphere *sphere);
-int parse_light(char *str, t_light *light);
-bool parse_ambient_lightning(char *str, t_amb_light *light);
+bool parse_light(char **str, t_light *light);
+bool parse_ambient_lightning(char **str, t_amb_light *light);
 
 /* =========== Parseur utils ========== */
 
+double	ft_strtod(char *s);
+bool valid_bright(double bright);
 int ft_atod(const char *str, double *nbr);
 void    ft_free_split(char **array);
 int parse_vec3(char *str, t_vec3 *vec);
@@ -119,7 +125,7 @@ int validate_orientation(const t_vec3 *orientation);
 double parse_fov(char *str);
 char    **ft_split(char const *s, char c);
 double ft_pow(double base, int exp);
-int     ft_str_to_double(const char *str, double *nbr);
+double str_to_double(const char *str);
 bool rgb(char *str, t_rgb *color);
 int parse_cylinder_details(char **parts, t_cyl *cyl);
-int parse_cylinder_color(char *part, t_cyl *cyl);
+// int parse_cylinder_color(char *part, t_cyl *cyl);

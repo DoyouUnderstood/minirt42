@@ -8,7 +8,7 @@ cy 50.0,0.0,20.6 0,0,1.0 14.2 21.42 10,0,255
 Ambient lightning:
         A 0.2 255,255,255
         ∗ identifier: A
-        ∗ a 
+        ∗ ambient lighting ratio in range [0.0,1.0]: 0.2
         ∗ R,G,B colors in range [0-255]: 255, 255, 255
 
 ◦ Camera:
@@ -50,9 +50,8 @@ Ambient lightning:
         ∗ the cylinder height: 21.42
         ∗ R,G,B colors in range [0,255]: 10, 0, 255
 
-*/
-
-POUR chaque pixel de l'écran
+'
+POUR chaque pixel de lécran
 définir le rayon primaire œil-pixel ;
 POUR chaque objet
 tester les intersections ;
@@ -63,9 +62,10 @@ affecter la couleur au pixel ;
 FPOUR
 FPOUR
 
-/*
-
+#
 LIEN UTILE 
 
 https://euler.ac-versailles.fr/IMG/pdf/raytracing.pdf
 https://theses.hal.science/tel-00812738/document
+
+'
