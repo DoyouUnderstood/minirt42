@@ -27,7 +27,6 @@ void print_sphere(const t_sphere *sphere)
     printf("Sphere:\n");
     printf(" Center: (%.2f, %.2f, %.2f)\n", sphere->center.x, sphere->center.y, sphere->center.z);
     printf(" Diameter: %.2f\n", sphere->diameter);
-    printf(" Color: (R: %d, G: %d, B: %d)\n", sphere->color[0], sphere->color[1], sphere->color[2]);
 }
 
 void print_rgb(const t_rgb *color)

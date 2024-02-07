@@ -84,38 +84,14 @@ bool parse_plane(char **parts, t_plane *plane)
     return (true);
 }
 
-int parse_sphere(char *str, t_sphere *sphere)
+bool parse_sphere(char **parts, t_sphere *sphere)
 {
-    char **parts = ft_split(str, ' ');
-    if (!parts)
-        return 0; 
-
     if (!parse_vec3(parts[1], &sphere->center))
-    {
-        ft_free_split(parts);
-        return 0;
-    }
-
-    if (!ft_atod(parts[2], &sphere->diameter) || sphere->diameter <= 0.0)
-    {
-        ft_free_split(parts);
-        return 0;
-    }
-    char **color_parts = ft_split(parts[3], ',');
-    for (int i = 0; i < 3; ++i)
-    {
-        double temp;
-        if (!ft_atod(color_parts[i], &temp) || temp < 0 || temp > 255)
-        {
-            ft_free_split(parts);
-            ft_free_split(color_parts);
-            return 0;
-        }
-        sphere->color[i] = (int)temp;
-    }
-
-    ft_free_split(parts);
-    ft_free_split(color_parts);
+        return (false);
+    if (!ft_atod(parts[2], &sphere->diameter))
+        return (false);
+    if (!rgb(parts[3], &sphere->color))
+        return (false);
     return 1;
 }
 

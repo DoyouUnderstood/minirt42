@@ -72,7 +72,7 @@ typedef struct s_sphere
 {
     t_vec3 center;
     double diameter;
-    int color[3];
+    t_rgb color;
 } t_sphere;
 
 typedef struct s_cyl
@@ -110,7 +110,7 @@ void ft_print_double_array(char **ptr);
 int parse_cylinder(char *str, t_cyl *cyl);
 bool parse_camera(char **line, t_camera *camera);
 bool parse_plane(char **str, t_plane *plane);
-int parse_sphere(char *str, t_sphere *sphere);
+bool parse_sphere(char **str, t_sphere *sphere);
 bool parse_light(char **str, t_light *light);
 bool parse_ambient_lightning(char **str, t_amb_light *light);
 
