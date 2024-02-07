@@ -116,6 +116,7 @@ bool parse_ambient_lightning(char **str, t_amb_light *light);
 
 /* =========== Parseur utils ========== */
 
+bool in_range(double start, double end, double value);
 double	ft_strtod(char *s);
 bool valid_bright(double bright);
 int ft_atod(const char *str, double *nbr);

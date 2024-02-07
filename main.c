@@ -61,12 +61,10 @@ bool ambient_check(char **str, double *intensity)
 
 bool parse_ambient_lightning(char **str, t_amb_light *light) 
 {
-    if (!ambient_check(&str[1], &(light->intensity))) {
+    if (!ambient_check(&str[1], &(light->intensity)))
         return false;
-    }
-    if (!rgb(str[2], &(light->color))) {
+    if (!rgb(str[2], &(light->color)))
         return false;
-    }
-    return true;
+    return (true);
 }
 

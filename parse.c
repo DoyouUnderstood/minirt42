@@ -35,21 +35,15 @@ bool parse_camera(char **parts, t_camera *camera)
     t_vec3 orientation;
     if (!parse_vec3(parts[1], &camera->pos))
         return (false);
-    if (parse_vec3(parts[2], &orientation))
-    {
-        if (!validate_orientation(&orientation))
-            return (false);
-        else
-            camera->orientation = orientation;
-    }
+    if (!parse_vec3(parts[2], &orientation))
+       return (false);
     else
-    {
-        printf("FDSFDSFDS");
-        return (false);
-    }
+        camera->orientation = orientation;
     fov = str_to_double(parts[3]);
-    printf("%s == %f\n", parts[3], fov);
-    camera->fov = fov;
+    if (!in_range(0, 70, fov))
+        return (false);
+    else
+        camera->fov = fov;
     return (true);
 }
 
