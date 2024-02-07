@@ -1,61 +1,60 @@
 #include "parse.h"
 
-void print_vec3(t_vec3 vec)
+void print_rgb(t_rgb color) {
+    printf("RGB Color: (r: %d, g: %d, b: %d)\n", color.r, color.g, color.b);
+}
+
+void print_vec3(t_vec3 vec) {
+    printf("Vector3: (x: %f, y: %f, z: %f)\n", vec.x, vec.y, vec.z);
+}
+
+void print_amb_light(t_amb_light amb) {
+    printf("Ambient Light: (Intensity: %f, ", amb.intensity);
+    print_rgb(amb.color); // This uses the RGB print function
+    printf(")\n");
+}
+
+void print_light(t_light light) {
+    printf("Light: (Position: ");
+    print_vec3(light.position);
+    printf(", Brightness: %f, ", light.brightness);
+    print_rgb(light.color);
+    printf(")\n");
+}
+
+void print_camera(t_camera cam) {
+    printf("Camera: (Position: ");
+    print_vec3(cam.pos);
+    printf(", Orientation: ");
+    print_vec3(cam.orientation);
+    printf(", FOV: %f)\n", cam.fov);
+}
+
+void print_plane(t_plane plane) 
 {
-    printf("x: %f, y: %f, z: %f", vec.x, vec.y, vec.z);
+    printf("Plane: (Center: ");
+    print_vec3(plane.center);
+    printf(", Orientation: ");
+    print_vec3(plane.orientation);
+    print_rgb(plane.color);
+    printf(")\n");
 }
 
-void print_camera(const t_camera *camera)
+void print_sphere(t_sphere sphere) 
 {
-    printf("Camera:\n");
-    printf(" Position: ");
-    print_vec3(camera->pos);
-    printf("\n Orientation: ");
-    print_vec3(camera->orientation);
-    printf("\n FOV: %f\n", camera->fov);
+    printf("Sphere: (Center: ");
+    print_vec3(sphere.center);
+    printf(", Diameter: %f, ", sphere.diameter);
+    print_rgb(sphere.color);
+    printf(")\n");
 }
 
-void print_light(const t_light *light)
-{
-    printf("Light:\n");
-    print_vec3(light->position);
-    printf("\nBrightness: %.2f\n", light->brightness);
+void print_cyl(t_cyl cyl) {
+    printf("Cylinder: (Center: ");
+    print_vec3(cyl.center);
+    printf(", Orientation: ");
+    print_vec3(cyl.orientation);
+    printf(", Diameter: %f, Height: %f, ", cyl.diameter, cyl.height);
+    print_rgb(cyl.color);
+    printf(")\n");
 }
-
-void print_sphere(const t_sphere *sphere)
-{
-    printf("Sphere:\n");
-    printf(" Center: (%.2f, %.2f, %.2f)\n", sphere->center.x, sphere->center.y, sphere->center.z);
-    printf(" Diameter: %.2f\n", sphere->diameter);
-}
-
-void print_rgb(const t_rgb *color)
-{
-    printf("(R: %d, G: %d, B: %d)", color->r, color->g, color->b);
-}
-
-void print_plane(const t_plane *plane)
-{
-    printf("Plane:\n");
-    printf(" Center: ");
-    print_vec3(plane->center);
-    printf("\n Orientation: ");
-    print_vec3(plane->orientation);
-    printf("\n Color: ");
-    print_rgb(&plane->color);
-    printf("\n");
-}
-
-void print_cylinder(const t_cyl *cyl) {
-    printf("Cylinder:\n");
-    printf(" Center: ");
-    print_vec3(cyl->center);
-    printf("\n Orientation: ");
-    print_vec3(cyl->orientation);
-    printf("\n Diameter: %.2f", cyl->diameter);
-    printf("\n Height: %.2f", cyl->height);
-    printf("\n ");
-    print_rgb(&cyl->color);
-    printf("\n");
-}
-

@@ -42,7 +42,7 @@ static void	make_double(char *s, double *integer, double *fractional, int *neg)
 		if (*integer >  2147483647 / 10 || (*integer ==  2147483647 && *s > '7'))
         {
             printf("File Format Error (Integer Overflow)");
-             exit(1);
+            exit(1);
         }
 		*integer = *integer * 10 + *s - '0';
 		++s;
@@ -75,9 +75,10 @@ static void	make_fractional(char *s, double *fractional)
 			--len;
 		}
 	}
-	if (*s != '\0')
-	{
-        printf("File Format Error");
-        exit(1);
-    }	
+	// if (*s != '\0')
+	// {
+	// 	printf("fsdfsdfds\n");
+    //     printf("File Format Error");
+    //     exit(1);
+    // }	
 }

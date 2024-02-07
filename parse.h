@@ -96,18 +96,20 @@ typedef struct s_scene
 
 
 /* =========== Print ============ */
-void print_camera(const t_camera *camera);
+void print_rgb(t_rgb color);
+void print_amb_light(t_amb_light amb);
+void print_camera(t_camera cam);
 void print_vec3(t_vec3 vec);
-void print_light(const t_light *light);
-void print_sphere(const t_sphere *sphere);
-void print_plane(const t_plane *plane);
-void print_cylinder(const t_cyl *cyl);
+void print_light(t_light light);
+void print_sphere(t_sphere sphere);
+void print_plane(t_plane plane);
+void print_cyl(t_cyl cyl);
 void ft_print_double_array(char **ptr);
 
 
 
 /* =========== Parseur ========== */
-int parse_cylinder(char *str, t_cyl *cyl);
+bool parse_cylinder(char **str, t_cyl *cyl);
 bool parse_camera(char **line, t_camera *camera);
 bool parse_plane(char **str, t_plane *plane);
 bool parse_sphere(char **str, t_sphere *sphere);

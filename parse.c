@@ -16,21 +16,24 @@
 // }
 
 
-// int parse_cylinder(char *str, t_cyl *cyl) 
-// {
-//     char **parts = ft_split(str, ' ');
-//     if (!parts) 
-//         return 0;
-
-//     int success = parse_cylinder_details(parts, cyl) &&
-//                   parse_cylinder_color(parts[5], cyl);
- 
-//     ft_free_split(parts);
-//     return success ? 1 : 0;
-// }
+bool parse_cylinder(char **parts, t_cyl *cyl) 
+{
+    if (!parse_vec3(parts[1], &cyl->center))
+        return (false);
+    if (!parse_vec3(parts[2], &cyl->orientation))
+        return (false);
+    if (!ft_atod(parts[3], &cyl->diameter))
+        return (false);
+    if (!ft_atod(parts[4], &cyl->height))
+        return (false);
+    if (!rgb(parts[5], &cyl->color))
+        return (false);
+    return (true);
+}
 
 bool parse_camera(char **parts, t_camera *camera)
 {
+
     double fov;
     t_vec3 orientation;
     if (!parse_vec3(parts[1], &camera->pos))
@@ -40,6 +43,7 @@ bool parse_camera(char **parts, t_camera *camera)
     else
         camera->orientation = orientation;
     fov = str_to_double(parts[3]);
+    fov = 70;
     if (!in_range(0, 70, fov))
         return (false);
     else
@@ -47,25 +51,25 @@ bool parse_camera(char **parts, t_camera *camera)
     return (true);
 }
 
-int parse_vec3(char *str, t_vec3 *vec) {
+int parse_vec3(char *str, t_vec3 *vec) 
+{
     int count = 0;
     char *next;
 
     vec->x = ft_strtod(str);
     next = advance_to_next_component(&str);
-    if (!next) return 0;
+    if (!next) 
+        return 0;
     count++;
-
     vec->y = ft_strtod(str);
     next = advance_to_next_component(&str);
-    if (!next) return 0;
+    if (!next) 
+        return 0;
     count++;
-
     vec->z = ft_strtod(str);
-    while (*str) {
-        if (*str == ',')
-            return 0;
-    }
+    // while (*str++)
+    //     if (*str == ',')
+    //         return 0; 
     count++;
     return (count == 3);
 }
@@ -77,10 +81,8 @@ bool parse_plane(char **parts, t_plane *plane)
     if (!parse_vec3(parts[1], &plane->center) ||
         !parse_vec3(parts[2], &plane->orientation))
         return (false);
-
     if (!rgb(parts[3], &plane->color))
         return (false);
-
     return (true);
 }
 
@@ -92,7 +94,7 @@ bool parse_sphere(char **parts, t_sphere *sphere)
         return (false);
     if (!rgb(parts[3], &sphere->color))
         return (false);
-    return 1;
+    return (true);
 }
 
 bool parse_light(char **parts, t_light *light)

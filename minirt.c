@@ -76,10 +76,10 @@ void parse(char **str)
     int i;
     t_camera camera;
     t_light light;
-    // t_sphere sphere;
+    t_sphere sphere;
     t_plane plane;
     t_amb_light am_light;
-    // t_cyl cyl;
+    t_cyl cyl;
 
     i = 0;
     ptr = NULL;
@@ -94,10 +94,18 @@ void parse(char **str)
             parse_light(ptr, &light);
         else if (!strncmp(ptr[0], "pl", strlen(ptr[0])))
             parse_plane(ptr, &plane);
+        else if (!strncmp(ptr[0], "sp", strlen(ptr[0])))
+            parse_sphere(ptr, &sphere);
+        else if (!strncmp(ptr[0], "cy", strlen(ptr[0])))
+            parse_cylinder(ptr, &cyl);
         i++;
     }
-    print_camera(&camera);
-    print_light(&light);
+    print_amb_light(am_light);
+    print_camera(camera);
+    print_light(light);
+    print_plane(plane);
+    print_sphere(sphere);
+    print_cyl(cyl);
 }
 int main(int ac, char **argv)
 {
