@@ -109,7 +109,7 @@ void ft_print_double_array(char **ptr);
 /* =========== Parseur ========== */
 int parse_cylinder(char *str, t_cyl *cyl);
 bool parse_camera(char **line, t_camera *camera);
-int parse_plane(char *str, t_plane *plane);
+bool parse_plane(char **str, t_plane *plane);
 int parse_sphere(char *str, t_sphere *sphere);
 bool parse_light(char **str, t_light *light);
 bool parse_ambient_lightning(char **str, t_amb_light *light);
@@ -130,3 +130,4 @@ double str_to_double(const char *str);
 bool rgb(char *str, t_rgb *color);
 int parse_cylinder_details(char **parts, t_cyl *cyl);
 // int parse_cylinder_color(char *part, t_cyl *cyl);
+char *advance_to_next_component(char **str);

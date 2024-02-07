@@ -149,3 +149,13 @@ bool valid_bright(double bright)
         return (true);
     return (false);
 }
+
+char *advance_to_next_component(char **str) {
+    while (**str && **str != ',') (*str)++; // Avancer jusqu'à la virgule ou la fin de la chaîne
+    if (**str == ',') {
+        (*str)++; // Passer la virgule
+        return *str; // Retourner le pointeur mis à jour
+    } else {
+        return NULL; // Aucune virgule trouvée, format incorrect
+    }
+}

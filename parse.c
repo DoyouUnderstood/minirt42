@@ -47,47 +47,41 @@ bool parse_camera(char **parts, t_camera *camera)
     return (true);
 }
 
-int parse_vec3(char *str, t_vec3 *vec)
-{
-    int parsed = 0;
-    char *end_ptr;
+int parse_vec3(char *str, t_vec3 *vec) {
+    int count = 0;
+    char *next;
 
-    vec->x = strtod(str, &end_ptr);
-    parsed += (str != end_ptr) && (*end_ptr == ',');
-    str = end_ptr + 1;
+    vec->x = ft_strtod(str);
+    next = advance_to_next_component(&str);
+    if (!next) return 0;
+    count++;
 
-    vec->y = strtod(str, &end_ptr);
-    parsed += (str != end_ptr) && (*end_ptr == ',');
-    str = end_ptr + 1;
+    vec->y = ft_strtod(str);
+    next = advance_to_next_component(&str);
+    if (!next) return 0;
+    count++;
 
-    vec->z = strtod(str, &end_ptr);
-    parsed += (str != end_ptr);
-
-    return (parsed == 3);
+    vec->z = ft_strtod(str);
+    while (*str) {
+        if (*str == ',')
+            return 0;
+    }
+    count++;
+    return (count == 3);
 }
 
 
-int parse_plane(char *str, t_plane *plane)
-{
-    char **parts = ft_split(str, ' ');
-    if (!parts || !parts[1] || !parts[2] || !parts[3])
-        return 0; // Validation basique et échec du split
 
+bool parse_plane(char **parts, t_plane *plane)
+{
     if (!parse_vec3(parts[1], &plane->center) ||
         !parse_vec3(parts[2], &plane->orientation))
-    {
-        ft_free_split(parts); // Libération de la mémoire en cas d'échec
-        return 0;
-    }
+        return (false);
 
     if (!rgb(parts[3], &plane->color))
-    {
-        ft_free_split(parts); 
-        return 0;
-    }
+        return (false);
 
-    ft_free_split(parts);
-    return 1; // Succès
+    return (true);
 }
 
 int parse_sphere(char *str, t_sphere *sphere)
@@ -129,7 +123,6 @@ bool parse_light(char **parts, t_light *light)
 {
     if (!parse_vec3(parts[1], &light->position))
         return (false);
-    write(1, "c", 1);
     if (!ft_atod(parts[2], &light->brightness))
         return (false);
     if (!valid_bright(light->brightness))

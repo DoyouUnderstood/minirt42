@@ -77,7 +77,7 @@ void parse(char **str)
     t_camera camera;
     t_light light;
     // t_sphere sphere;
-    // t_plane plane;
+    t_plane plane;
     t_amb_light am_light;
     // t_cyl cyl;
 
@@ -92,6 +92,8 @@ void parse(char **str)
             parse_camera(ptr, &camera);
         else if (!strncmp(ptr[0], "L", strlen(ptr[0])))
             parse_light(ptr, &light);
+        else if (!strncmp(ptr[0], "pl", strlen(ptr[0])))
+            parse_plane(ptr, &plane);
         i++;
     }
     print_camera(&camera);
