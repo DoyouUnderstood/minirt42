@@ -19,7 +19,7 @@ INCLUDES = -I$(LIBFT_DIR) -I$(GNL_DIR) -I$(FT_PRINTF_DIR)
 LIBS = -L$(LIBFT_DIR) -lft -L$(GNL_DIR) -lgnl -L$(FT_PRINTF_DIR) -lftprintf -lm
 
 # Fichiers source
-SRCS = minirt.c ft_str_to_double.c print.c parse_utils.c parse.c main.c free.c
+SRCS = minirt.c print.c parse_utils.c parse.c main.c free.c
 
 # Commande de compilation
 $(NAME):

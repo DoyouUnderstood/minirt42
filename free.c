@@ -6,7 +6,7 @@
 /*   By: alletond <alletond@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 18:53:45 by alletond          #+#    #+#             */
-/*   Updated: 2024/02/12 17:37:39 by alletond         ###   ########.fr       */
+/*   Updated: 2024/02/12 18:37:57 by alletond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,3 +51,16 @@ void free_scene(t_scene *scene)
     free_objects_list(&scene->objects);
 }
 
+void free_split(char **parts) 
+{
+    int i = 0;
+    if (parts) 
+    {
+        while (parts[i]) 
+        {
+            free(parts[i]);
+            i++;
+        }
+        free(parts);
+    }
+}

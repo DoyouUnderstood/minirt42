@@ -2,8 +2,6 @@
 
 #include <stdio.h>
 
-// Définitions préalables des structures et énumérations
-
 void print_amb_light(t_amb_light amb) {
     printf("Ambient Light: Intensity = %f, Color = RGB(%d, %d, %d)\n", amb.intensity, amb.color.r, amb.color.g, amb.color.b);
 }

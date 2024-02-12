@@ -47,20 +47,6 @@ void add_object(t_obj_list *list, void *obj, t_obj_type type)
     }
 }
 
-void free_split(char **parts) 
-{
-    int i = 0;
-    if (parts) 
-    {
-        while (parts[i]) 
-        {
-            free(parts[i]);
-            i++;
-        }
-        free(parts);
-    }
-}
-
 void *allocate_object(char **ptr, t_obj_type type) 
 {
     if (type == SPHERE) 

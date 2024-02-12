@@ -13,22 +13,6 @@ double ft_pow(double base, int exp)
     return result;
 }
 
-void    ft_free_split(char **array)
-{
-    int i;
-
-    if (!array)
-        return;
-
-    i = 0;
-    while (array[i])
-    {
-        free(array[i]);
-        i++;
-    }
-    free(array);
-}
-
 int validate_orientation(const t_vec3 *orientation)
 {
     double len = sqrt(orientation->x * orientation->x + orientation->y * orientation->y + orientation->z * orientation->z);
@@ -57,16 +41,15 @@ char *advance_to_next_component(char **str)
 {
     while (**str && **str != ',') 
         (*str)++;
-    if (**str == ',') 
-    {
+    if (**str == ',') {
         (*str)++;
         return *str;
     } else
-        return (NULL);
+        return NULL;
 }
 
 void	error_exit(const char *error)
 {
-	printf("Error: %s\n", error);
+	printf("%s\n", error);
 	exit(EXIT_FAILURE);
 }

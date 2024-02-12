@@ -24,8 +24,8 @@ void parse_camera(char **parts, t_camera *camera)
        error_exit("error with parsing\n");
     else
         camera->orientation = orientation;
-    fov = str_to_double(parts[3]);
-    fov = 70;
+    if (!ft_atod(parts[3], &fov))
+        error_exit("error with parsing\n");
     if (!in_range(0, 70, fov))
         error_exit("error with parsing\n");
     else
