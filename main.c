@@ -1,6 +1,5 @@
 #include "parse.h"
 
-
 bool in_range(double start, double end, double value)
 {
     return (value >= start && value <= end);
@@ -27,44 +26,35 @@ bool parse_rgb(char **str, int *value)
     return (true);
 }
 
-bool rgb(char *str, t_rgb *color)
+void rgb(char *str, t_rgb *color)
 {
     int r;
     int g;
     int b;
 
     if (!parse_rgb(&str, &r) || !in_range(0, 255, r))
-        return (false);
+        error_exit("error with parsing");
     if (!parse_rgb(&str, &g) || !in_range(0, 255, g))
-        return (false);
+        error_exit("error with parsing");
     if (!parse_rgb(&str, &b) || !in_range(0, 255, b))
-        return (false);
+        error_exit("error with parsing");
     if (*str != '\0')
-        return (false);
-    
+        error_exit("error with parsing");
     color->r = r;
     color->g = g;
     color->b = b;
-    return (true);
 }
 
-
-bool ambient_check(char **str, double *intensity) 
+void ambient_check(char **str, double *intensity) 
 {
     ft_atod(*str, intensity);
-    if (!in_range(0.0, 1.0, *intensity)) {
-        return false;
-    }
-    return true;
+    if (!in_range(0.0, 1.0, *intensity))
+        error_exit("error with parsing");
 }
 
-
-bool parse_ambient_lightning(char **str, t_amb_light *light) 
+void parse_ambient_lightning(char **str, t_amb_light *light) 
 {
-    if (!ambient_check(&str[1], &(light->intensity)))
-        return false;
-    if (!rgb(str[2], &(light->color)))
-        return false;
-    return (true);
+    ambient_check(&str[1], &(light->intensity));
+    rgb(str[2], &(light->color));
 }
 

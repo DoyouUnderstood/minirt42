@@ -1,6 +1,7 @@
 #include "parse.h"
 
-double str_to_double(const char *str) {
+double str_to_double(const char *str) 
+{
     if (str == NULL) {
         return 0.0;
     }
@@ -16,7 +17,7 @@ double str_to_double(const char *str) {
         }
     }
 
-    double result = ft_strtod(copy); //ou &end ? 
+    double result = ft_strtod(copy);
     free(copy);
     return (result);
 }

@@ -1,146 +1,166 @@
 #include "parse.h"
 
-static char *ft_strjoin_and_free(char *s1, char *s2, ssize_t n)
+char    *read_file_into_str(const char *str)
 {
-    char    *new_str;
-    ssize_t  i;
+    int fd;
+    char	*line;
+	char	*temp;
+	char	*file_content;
 
-    if (!s1 || !s2)
-        return (NULL);
-    new_str = (char *)malloc(sizeof(*new_str) * (n + 1));
-    if (!new_str)
-        return (NULL);
-    i = -1;
-    while (++i < n && s2[i] != '\0')
-        new_str[i] = s2[i];
-    new_str[i] = '\0';
-    free(s1);
-    return (new_str);
-}
-
-char    *read_file_into_str(const char *file_path)
-{
-    int     fd;
-    ssize_t bytes_read;
-    char    buffer[1024];
-    char    *content;
-    char    *temp;
-
-    fd = open(file_path, O_RDONLY);
+    fd = open(str, O_RDONLY);
     if (fd == -1)
-        return (NULL);
-    content = malloc(1);
-    if (!content)
-        return (NULL);
-    content[0] = '\0';
-    while ((bytes_read = read(fd, buffer, 1024)) > 0)
+        error_exit("Error open filen\n");
+	file_content = ft_strdup("");
+	line = get_next_line(fd);
+	while (line != NULL)
+	{
+		temp = ft_strjoin(file_content, line);
+		free(file_content);
+		free(line);
+		file_content = temp;
+		line = get_next_line(fd);
+	}
+	return (file_content);
+}
+
+void add_object(t_obj_list *list, void *obj, t_obj_type type) 
+{
+    t_object *current;
+    t_object *new_object = malloc(sizeof(t_object));
+    if (!new_object) 
     {
-        temp = ft_strjoin_and_free(content, buffer, bytes_read);
-        if (!temp)
+        perror("Allocation failed");
+        exit(EXIT_FAILURE);
+    }
+    new_object->type = type;
+    new_object->obj = obj;
+    new_object->next = NULL;
+
+    if (list->head == NULL)
+        list->head = new_object;
+    else 
+    {
+        current = list->head;
+        while (current->next != NULL)
+            current = current->next;
+        current->next = new_object;
+    }
+}
+
+void free_split(char **parts) 
+{
+    int i = 0;
+    if (parts) 
+    {
+        while (parts[i]) 
         {
-            free(content);
-            close(fd);
-            return (NULL);
+            free(parts[i]);
+            i++;
         }
-        content = temp;
-    }
-    if (bytes_read == -1)
-    {
-        free(content);
-        close(fd);
-        return (NULL);
-    }
-    close(fd);
-    return (content);
-}
-
-void    ft_print_double_array(char **arr)
-{
-   int i;
-
-    if (!arr)
-        return;
-    i = 0;
-    while (arr[i] != NULL) // La fin du tableau est marquée par un pointeur NULL
-    {
-        printf("%s\n", arr[i]);
-        i++;
+        free(parts);
     }
 }
 
-//separer la fonction est gerer les erreurs de retour.
-
-void parse(char **str)
+void *allocate_object(char **ptr, t_obj_type type) 
 {
+    if (type == SPHERE) 
+    {
+        t_sphere *obj = malloc(sizeof(t_sphere));
+        if (obj) 
+            parse_sphere(ptr, obj);
+        return (obj);
+    } 
+    else if (type == PLANE) 
+    {
+        t_plane *obj = malloc(sizeof(t_plane));
+        if (obj) 
+            parse_plane(ptr, obj);
+        return (obj);
+    } else if (type == CYLINDER) 
+    {
+        t_cyl *obj = malloc(sizeof(t_cyl));
+        if (obj) 
+            parse_cylinder(ptr, obj);
+        return (obj);
+    }
+    return (NULL);
+}
+
+t_obj_type get_object_type(char *identifier) 
+{
+    if (!strncmp(identifier, "sp", 2)) 
+        return (SPHERE);
+    else if (!strncmp(identifier, "pl", 2)) 
+        return (PLANE);
+    else if (!strncmp(identifier, "cy", 2)) 
+        return (CYLINDER);
+    else 
+        return (INVALID_TYPE);
+}
+
+void parse_object(char **ptr, t_obj_list *objects) 
+{
+    t_obj_type type = get_object_type(ptr[0]);
+    if (type != INVALID_TYPE)
+    {
+        void *obj = allocate_object(ptr, type);
+        if (obj)
+            add_object(objects, obj, type);
+        else
+            error_exit("failed to allocate\n");
+    } else 
+        error_exit("failed to create object \n");
+}
+
+
+t_scene parse(char **str) {
     char **ptr;
     int i;
-    t_camera camera;
-    t_light light;
-    t_sphere sphere;
-    t_plane plane;
-    t_amb_light am_light;
-    t_cyl cyl;
-
+    t_scene scene;
+    scene.objects.head = NULL;
     i = 0;
-    ptr = NULL;
-    while (str[i])
+    while (str[i]) 
     {
         ptr = ft_split(str[i], ' ');
-        if (!strncmp(ptr[0], "A", strlen(ptr[0])))
-            parse_ambient_lightning(ptr, &am_light);
-        else if (!strncmp(ptr[0], "C", strlen(ptr[0])))
-            parse_camera(ptr, &camera);
-        else if (!strncmp(ptr[0], "L", strlen(ptr[0])))
-            parse_light(ptr, &light);
-        else if (!strncmp(ptr[0], "pl", strlen(ptr[0])))
-            parse_plane(ptr, &plane);
-        else if (!strncmp(ptr[0], "sp", strlen(ptr[0])))
-            parse_sphere(ptr, &sphere);
-        else if (!strncmp(ptr[0], "cy", strlen(ptr[0])))
-            parse_cylinder(ptr, &cyl);
+        if (!strncmp(ptr[0], "A", ft_strlen(ptr[0])))
+            parse_ambient_lightning(ptr, &scene.amb_light);
+        else if (!strncmp(ptr[0], "C", ft_strlen(ptr[0])))
+            parse_camera(ptr, &scene.camera);
+        else if (!strncmp(ptr[0], "L", ft_strlen(ptr[0])))
+            parse_light(ptr, &scene.spot_light);
+        else
+            parse_object(ptr, &scene.objects);
+        free_split(ptr);
         i++;
     }
-    print_amb_light(am_light);
-    print_camera(camera);
-    print_light(light);
-    print_plane(plane);
-    print_sphere(sphere);
-    print_cyl(cyl);
+    return (scene);
 }
-int main(int ac, char **argv)
+
+
+t_scene check_and_fill(char **argv)
 {
-    (void)ac;
+    t_scene scene;
+    
     char *str = read_file_into_str(argv[1]);
     char **ptr = ft_split(str, '\n');
-    // ft_print_double_array(ptr);
-    // printf("===================\n");
-    parse(ptr);
-    // t_camera camera;
-    // t_light light;
-    // t_sphere sphere;
-    // t_plane plane;
-    // t_cyl cyl;
-    
-    // char *line = "C -50.0,0aaaa,20     0,0,1   70";
-    // char *line_C = "L -40.0,50.0,0.0 0.6 10,0,255";
-    // char *line_sp = "sp 199999,0.0,20.6 12.6 10,0,255";
-    // char *line_pl = "pl 0.0,0.0,-1088888.0 0.0,1.....0,0.0 0,0,225";
-    // char *line_cy = "cy 50.0,0.0,20.6 0.0,0.0,1.0 1fghj4.2 21.42 10,0,255";
+    scene = parse(ptr);
+    free(str);
+    int i = 0;
+    while (ptr[i])
+    {
+        free(ptr[i]);
+        i++;
+    }
+    free(ptr);
+    return (scene);
+}
 
-    // int res_cy = parse_cylinder(line_cy, &cyl);
-    // int res_sp = parse_sphere(line_sp, &sphere);
-    // int res_C = parse_camera(line, &camera);
-    // int res_L = parse_light(line_C, &light);
-    // int res_pl = parse_plane(line_pl, &plane);
-    // print_camera(&camera);
-    // print_cylinder(&cyl);
-    // printf("%d\n", res_L);
-    // printf("%d\n", res_C);
-    // printf("%d\n", res_sp);
-    // printf("%d\n", res_pl);
-    // printf("%d\n", res_cy);
-
-    // print_plane(&plane);
-    // print_sphere(&sphere);
-    // print_light(&light);
+int main(int ac, char **argv)
+{
+    t_scene scene;
+    (void)ac;
+    scene = check_and_fill(argv);
+    print_scene(scene);
+    free_scene(&scene);
+    return (0);
 }

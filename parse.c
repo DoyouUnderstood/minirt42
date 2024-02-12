@@ -1,54 +1,35 @@
 #include "parse.h"
 
-// int parse_all()
-// {
-//     t_camera camera;
-//     t_light light;
-//     t_sphere sphere;
-//     t_plane plane;
-//     t_cyl cyl; 
-
-//     if (!parse_cylinder(line_cy, &cyl)
-//         || !parse_sphere(line_sp, &sphere)
-//         || !parse_camera(line, &camera)
-//         || !parse_light(line_C, &light)
-//         || !parse_plane(line_pl, &plane))
-// }
-
-
-bool parse_cylinder(char **parts, t_cyl *cyl) 
+void parse_cylinder(char **parts, t_cyl *cyl) 
 {
     if (!parse_vec3(parts[1], &cyl->center))
-        return (false);
+        error_exit("error with parsing\n");
     if (!parse_vec3(parts[2], &cyl->orientation))
-        return (false);
+        error_exit("error with parsing\n");
     if (!ft_atod(parts[3], &cyl->diameter))
-        return (false);
+        error_exit("error with parsing\n");
     if (!ft_atod(parts[4], &cyl->height))
-        return (false);
-    if (!rgb(parts[5], &cyl->color))
-        return (false);
-    return (true);
+        error_exit("error with parsing\n");
+    rgb(parts[5], &cyl->color);
 }
 
-bool parse_camera(char **parts, t_camera *camera)
+void parse_camera(char **parts, t_camera *camera)
 {
 
     double fov;
     t_vec3 orientation;
     if (!parse_vec3(parts[1], &camera->pos))
-        return (false);
+        error_exit("error with parsing\n");
     if (!parse_vec3(parts[2], &orientation))
-       return (false);
+       error_exit("error with parsing\n");
     else
         camera->orientation = orientation;
     fov = str_to_double(parts[3]);
     fov = 70;
     if (!in_range(0, 70, fov))
-        return (false);
+        error_exit("error with parsing\n");
     else
         camera->fov = fov;
-    return (true);
 }
 
 int parse_vec3(char *str, t_vec3 *vec) 
@@ -59,53 +40,42 @@ int parse_vec3(char *str, t_vec3 *vec)
     vec->x = ft_strtod(str);
     next = advance_to_next_component(&str);
     if (!next) 
-        return 0;
+        return (0);
     count++;
     vec->y = ft_strtod(str);
     next = advance_to_next_component(&str);
     if (!next) 
-        return 0;
+        return (0);
     count++;
     vec->z = ft_strtod(str);
-    // while (*str++)
-    //     if (*str == ',')
-    //         return 0; 
     count++;
     return (count == 3);
 }
 
-
-
-bool parse_plane(char **parts, t_plane *plane)
+void parse_plane(char **parts, t_plane *plane)
 {
     if (!parse_vec3(parts[1], &plane->center) ||
         !parse_vec3(parts[2], &plane->orientation))
-        return (false);
-    if (!rgb(parts[3], &plane->color))
-        return (false);
-    return (true);
+        error_exit("error with parsing\n");
+        rgb(parts[3], &plane->color);
 }
 
-bool parse_sphere(char **parts, t_sphere *sphere)
+void parse_sphere(char **parts, t_sphere *sphere)
 {
     if (!parse_vec3(parts[1], &sphere->center))
-        return (false);
+        error_exit("error with parsing\n");
     if (!ft_atod(parts[2], &sphere->diameter))
-        return (false);
-    if (!rgb(parts[3], &sphere->color))
-        return (false);
-    return (true);
+        error_exit("error with parsing\n");
+    rgb(parts[3], &sphere->color);
 }
 
-bool parse_light(char **parts, t_light *light)
+void parse_light(char **parts, t_light *light)
 {
     if (!parse_vec3(parts[1], &light->position))
-        return (false);
+        error_exit("error with parsing\n");
     if (!ft_atod(parts[2], &light->brightness))
-        return (false);
+        error_exit("error with parsing\n");
     if (!valid_bright(light->brightness))
-        return (false);
-    if (!rgb(parts[3], &light->color))
-        return (false);
-    return (true);
+        error_exit("error with parsing\n");
+    rgb(parts[3], &light->color);
 }

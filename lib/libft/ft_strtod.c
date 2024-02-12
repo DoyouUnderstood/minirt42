@@ -1,12 +1,7 @@
-#include "parse.h"
+#include "libft.h"
 
 static void	make_double(char *s, double *integer, double *fractional, int *neg);
 static void	make_fractional(char *s, double *fractional);
-
-static int ft_isdigit(int c)
-{
-    return (c >= '0' && c <= '9');
-}
 
 double	ft_strtod(char *s)
 {

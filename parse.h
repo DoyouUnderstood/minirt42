@@ -5,6 +5,8 @@
 #include <stdbool.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include "lib/libft/libft.h"
+#include "lib/GNL/get_next_line.h"
 
 typedef struct s_rgb
 {
@@ -47,6 +49,7 @@ typedef enum e_obj_type
     SPHERE,
     PLANE,
     CYLINDER,
+    INVALID_TYPE = -1,
 } t_obj_type;
 
 typedef struct s_object
@@ -96,28 +99,25 @@ typedef struct s_scene
 
 
 /* =========== Print ============ */
-void print_rgb(t_rgb color);
-void print_amb_light(t_amb_light amb);
-void print_camera(t_camera cam);
-void print_vec3(t_vec3 vec);
-void print_light(t_light light);
-void print_sphere(t_sphere sphere);
-void print_plane(t_plane plane);
-void print_cyl(t_cyl cyl);
-void ft_print_double_array(char **ptr);
+
+void print_scene(t_scene scene);
+void    ft_print_double_array(char **arr);
 
 
 
 /* =========== Parseur ========== */
-bool parse_cylinder(char **str, t_cyl *cyl);
-bool parse_camera(char **line, t_camera *camera);
-bool parse_plane(char **str, t_plane *plane);
-bool parse_sphere(char **str, t_sphere *sphere);
-bool parse_light(char **str, t_light *light);
-bool parse_ambient_lightning(char **str, t_amb_light *light);
+
+void parse_cylinder(char **str, t_cyl *cyl);
+void parse_camera(char **line, t_camera *camera);
+void parse_plane(char **str, t_plane *plane);
+void parse_sphere(char **str, t_sphere *sphere);
+void parse_light(char **str, t_light *light);
+void parse_ambient_lightning(char **str, t_amb_light *light);
+t_scene parse(char **str);
 
 /* =========== Parseur utils ========== */
 
+void	error_exit(const char *error);
 bool in_range(double start, double end, double value);
 double	ft_strtod(char *s);
 bool valid_bright(double bright);
@@ -129,7 +129,7 @@ double parse_fov(char *str);
 char    **ft_split(char const *s, char c);
 double ft_pow(double base, int exp);
 double str_to_double(const char *str);
-bool rgb(char *str, t_rgb *color);
+void rgb(char *str, t_rgb *color);
 int parse_cylinder_details(char **parts, t_cyl *cyl);
-// int parse_cylinder_color(char *part, t_cyl *cyl);
 char *advance_to_next_component(char **str);
+void free_scene(t_scene *scene);
