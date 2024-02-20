@@ -1,9 +1,10 @@
-#include "lib/GNL/get_next_line.h"
-#include "lib/libft/libft.h"
+#include "../lib/GNL/get_next_line.h"
+#include "../lib/libft/libft.h"
 #include <fcntl.h>
 #include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include "../lib/mlx/mlx/mlx.h"
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
@@ -103,9 +104,11 @@ void				parse_sphere(char **str, t_sphere *sphere);
 void				parse_light(char **str, t_light *light);
 void				parse_ambient_lightning(char **str, t_amb_light *light);
 t_scene				parse(char **str);
+void parse_object(char **ptr, t_obj_list *objects);
 
 /* =========== Parseur utils ========== */
 
+t_scene 			check_and_fill(char **argv);
 void				error_exit(const char *error);
 bool				in_range(double start, double end, double value);
 double				ft_strtod(char *s);

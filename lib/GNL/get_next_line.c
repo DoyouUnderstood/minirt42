@@ -86,6 +86,7 @@ char	*get_next_line(int fd)
 	char		*res;
 	int			readret;
 	int			pos;
+	write(1, "suuu", 4);
 
 	if (check_error(fd, &stack))
 		return (NULL);
@@ -104,5 +105,6 @@ char	*get_next_line(int fd)
 			stack = stackcut(stack, pos + 1);
 			return (res);
 		}
+		printf("fsfs");
 	}
 }

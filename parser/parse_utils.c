@@ -1,4 +1,4 @@
-#include "parse.h"
+#include "../include/parse.h"
 
 double ft_pow(double base, int exp)
 {

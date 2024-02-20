@@ -1,4 +1,4 @@
-#include "parse.h"
+#include "../include/parse.h"
 
 bool in_range(double start, double end, double value)
 {

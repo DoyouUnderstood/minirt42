@@ -5,25 +5,36 @@ NAME = miniRT
 CC = gcc
 
 # Flags de compilation
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -I./mlx
 
-# Chemins d'inclusion
+# Chemins d'inclusion pour les librairies internes
 LIBFT_DIR = lib/libft
 GNL_DIR = lib/GNL
 FT_PRINTF_DIR = lib/ft_printf
 
-# Flags d'inclusion
-INCLUDES = -I$(LIBFT_DIR) -I$(GNL_DIR) -I$(FT_PRINTF_DIR)
+# Chemin vers MinilibX
+MLX_DIR = lib/mlx/mlx
 
-# Librairies à lier
-LIBS = -L$(LIBFT_DIR) -lft -L$(GNL_DIR) -lgnl -L$(FT_PRINTF_DIR) -lftprintf -lm
+# Inclure le dossier pour les fichiers d'en-tête MinilibX
+# Assurez-vous de remplacer `chemin_vers_minilibx` par le chemin réel vers MinilibX sur votre système
+INCLUDES = -I$(LIBFT_DIR) -I$(GNL_DIR) -I$(FT_PRINTF_DIR) -I$(MLX_DIR)
+
+# Librairies à lier (y compris MinilibX et les librairies nécessaires pour X11 et potentiellement libbsd)
+LIBS = -L$(LIBFT_DIR) -lft -L$(GNL_DIR) -lgnl -L$(FT_PRINTF_DIR) -lftprintf \
+       -L$(MLX_DIR) -lmlx -L/lib/mlx/mlx -lXext -lX11 -lm
+
+# Ajoutez `-lbsd` ici si vous êtes sur un système qui le requiert, comme Linux
+# Par exemple: LIBS += -lbsd
 
 # Fichiers source
-SRCS = minirt.c print.c parse_utils.c parse.c main.c free.c
+SRCS = parser/minirt.c parser/print.c parser/parse_utils.c parser/parse.c parser/utils.c parser/free.c parser/object.c mlx/mlx.c mlx/event.c vecteur/vecteur.c vecteur/projectile.c
 
-# Commande de compilation
-$(NAME):
-	$(CC) $(CFLAGS) $(INCLUDES) $(SRCS) -o $(NAME) $(LIBS)
+# Objets
+OBJS = $(SRCS:.c=.o)
+
+# Compiler les bibliothèques et le programme
+$(NAME): libft gnl ft_printf $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBS) $(INCLUDES)
 
 # Compiler les bibliothèques
 libft:
@@ -35,21 +46,16 @@ gnl:
 ft_printf:
 	make -C $(FT_PRINTF_DIR)
 
-# Dépendances pour compiler les bibliothèques avant le programme principal
-
-all: libft gnl ft_printf $(NAME)
-
 # Nettoyage des fichiers compilés
-
 clean:
-	rm -f $(NAME)
+	rm -f $(OBJS)
 	make -C $(LIBFT_DIR) clean
 	make -C $(GNL_DIR) clean
 	make -C $(FT_PRINTF_DIR) clean
 
 # Nettoyage complet, y compris les bibliothèques
-
 fclean: clean
+	rm -f $(NAME)
 	make -C $(LIBFT_DIR) fclean
 	make -C $(GNL_DIR) fclean
 	make -C $(FT_PRINTF_DIR) fclean
