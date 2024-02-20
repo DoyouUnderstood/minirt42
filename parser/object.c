@@ -6,10 +6,7 @@ void add_object(t_obj_list *list, void *obj, t_obj_type type)
     t_object *current;
     t_object *new_object = malloc(sizeof(t_object));
     if (!new_object) 
-    {
-        perror("Allocation failed");
-        exit(EXIT_FAILURE);
-    }
+       error_exit("Error allocate object minirt.c l 32 \n");
     new_object->type = type;
     new_object->obj = obj;
     new_object->next = NULL;
@@ -71,7 +68,64 @@ void parse_object(char **ptr, t_obj_list *objects)
         if (obj)
             add_object(objects, obj, type);
         else
-            error_exit("failed to allocate\n");
+            error_exit("failed to allocate object\n");
     } else 
-        error_exit("failed to create object \n");
+        error_exit("failed to create object, this is not good type buddy \n");
 }
+<<<<<<< HEAD:parser/object.c
+=======
+
+
+t_scene parse(char **str) 
+{
+    char **ptr;
+    int i;
+    t_scene scene;
+    scene.objects.head = NULL;
+    i = 0;
+    while (str[i]) 
+    {
+        ptr = ft_split(str[i], ' ');
+        if (!strncmp(ptr[0], "A", 1))
+            parse_ambient_lightning(ptr, &scene.amb_light);
+        else if (!strncmp(ptr[0], "C", 1))
+            parse_camera(ptr, &scene.camera);
+        else if (!strncmp(ptr[0], "L", 1))
+            parse_light(ptr, &scene.spot_light);
+        else
+            parse_object(ptr, &scene.objects);
+        free_split(ptr);
+        i++;
+    }
+    return (scene);
+}
+
+
+t_scene check_and_fill(char **argv)
+{
+    t_scene scene;
+    
+    char *str = read_file_into_str(argv[1]);
+    char **ptr = ft_split(str, '\n');
+    scene = parse(ptr);
+    free(str);
+    int i = 0;
+    while (ptr[i])
+    {
+        free(ptr[i]);
+        i++;
+    }
+    free(ptr);
+    return (scene);
+}
+
+int main(int ac, char **argv)
+{
+    t_scene scene;
+    (void)ac;
+    scene = check_and_fill(argv);
+    print_scene(scene);
+    free_scene(&scene);
+    return (0);
+}
+>>>>>>> 23d71a8ef56afb5a1d52f1ca411c3d337fae9c74:minirt.c
