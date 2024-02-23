@@ -14,7 +14,7 @@ int handle_keypress(int keysym, t_mlx *mlx)
 
 int close_window(t_mlx *mlx)
 {
-    mlx_cleanup(mlx); // Nettoie et libère les ressources
+    mlx_cleanup(mlx);
     exit(0); // Ferme l'application
     return (0);
 }

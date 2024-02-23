@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vecteur_test.c                                     :+:      :+:    :+:   */
+/*   vecteur.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alletond <alletond@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/12 18:48:04 by alletond          #+#    #+#             */
-/*   Updated: 2024/02/12 18:52:11 by alletond         ###   ########.fr       */
+/*   Updated: 2024/02/23 15:41:47 by alletond         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,22 +17,24 @@ t_tuple point(double x, double y, double z) {
     return (t_tuple){x, y, z, 1.0};
 }
 
+double dot(t_vec3 a, t_vec3 b) {
+    return a.x * b.x + a.y * b.y + a.z * b.z;
+}
+
 // Fonction pour créer un vecteur
 t_tuple vector(double x, double y, double z) {
     return (t_tuple){x, y, z, 0.0};
 }
 
-t_tuple add_tuples(t_tuple a1, t_tuple a2)
-{
+t_tuple add_tuples(t_tuple a1, t_tuple a2) {
     t_tuple result;
-
     result.x = a1.x + a2.x;
     result.y = a1.y + a2.y;
     result.z = a1.z + a2.z;
-    result.w = a1.w + a2.w; // Normalement, w devrait être 1 pour un point et 0 pour un vecteur
-
+    result.w = 1.0; // Assurez-vous que le résultat est traité comme un point
     return result;
 }
+
 
 double tuple_length(t_tuple a)
 {
@@ -50,6 +52,16 @@ t_tuple subtract_tuples(t_tuple a1, t_tuple a2)
 
     return result;
 }
+
+// Implémentation de la fonction subtract_vectors
+t_vec3 subtract_vectors(t_vec3 a, t_vec3 b) {
+    t_vec3 result;
+    result.x = a.x - b.x;
+    result.y = a.y - b.y;
+    result.z = a.z - b.z;
+    return result;
+}
+
 
 t_tuple negate_tuple(t_tuple a)
 {
@@ -79,22 +91,19 @@ t_tuple normalize_tuple(t_tuple a)
 {
     t_tuple result;
     double length = tuple_length(a);
-
-    // Assurez-vous que la longueur n'est pas zéro pour éviter la division par zéro
     if (length == 0)
     {
         result.x = result.y = result.z = result.w = 0;
         return result;
     }
-
     result.x = a.x / length;
     result.y = a.y / length;
     result.z = a.z / length;
-    result.w = a.w; // `w` est généralement 0 pour un vecteur, et n'est pas modifié par la normalisation
-
-    return result;
+    result.w = a.w;
+    return (result);
 }
 
+// produit scalaire entre 2 vecteurs.
 double dot_product(t_tuple a, t_tuple b)
 {
     return a.x * b.x + a.y * b.y + a.z * b.z;
@@ -107,7 +116,7 @@ t_tuple cross_product(t_tuple a, t_tuple b)
     result.x = a.y * b.z - a.z * b.y;
     result.y = a.z * b.x - a.x * b.z;
     result.z = a.x * b.y - a.y * b.x;
-    result.w = 0; // Le produit vectoriel produit un vecteur, donc w est 0
+    result.w = 0;
 
     return result;
 }

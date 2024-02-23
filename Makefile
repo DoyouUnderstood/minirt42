@@ -1,67 +1,53 @@
-# Nom du programme
 NAME = miniRT
 
-# Compilateur
-CC = gcc
-
-# Flags de compilation
-CFLAGS = -Wall -Wextra -Werror -I./mlx
-
-# Chemins d'inclusion pour les librairies internes
 LIBFT_DIR = lib/libft
-GNL_DIR = lib/GNL
 FT_PRINTF_DIR = lib/ft_printf
+GNL_DIR = lib/GNL
+MLX_DIR = lib/mlx
 
-# Chemin vers MinilibX
-MLX_DIR = lib/mlx/mlx
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror
 
-# Inclure le dossier pour les fichiers d'en-tête MinilibX
-# Assurez-vous de remplacer `chemin_vers_minilibx` par le chemin réel vers MinilibX sur votre système
-INCLUDES = -I$(LIBFT_DIR) -I$(GNL_DIR) -I$(FT_PRINTF_DIR) -I$(MLX_DIR)
+MLX_FLAGS = -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
 
-# Librairies à lier (y compris MinilibX et les librairies nécessaires pour X11 et potentiellement libbsd)
-LIBS = -L$(LIBFT_DIR) -lft -L$(GNL_DIR) -lgnl -L$(FT_PRINTF_DIR) -lftprintf \
-       -L$(MLX_DIR) -lmlx -L/lib/mlx/mlx -lXext -lX11 -lm
+INC_FLAGS = -I$(LIBFT_DIR) -I$(FT_PRINTF_DIR) -I$(GNL_DIR) -I$(MLX_DIR)
 
-# Ajoutez `-lbsd` ici si vous êtes sur un système qui le requiert, comme Linux
-# Par exemple: LIBS += -lbsd
+SRCS = parser/minirt.c parser/print.c parser/parse_utils.c \
+		parser/parse.c parser/utils.c parser/free.c parser/object.c \
+		mlx/mlx.c mlx/event.c vecteur/vecteur.c vecteur/projectile.c \
+		matrice/matrice.c matrice/rotation.c matrice/submatrix.c \
+		ray/ray.c
 
-# Fichiers source
-SRCS = parser/minirt.c parser/print.c parser/parse_utils.c parser/parse.c parser/utils.c parser/free.c parser/object.c mlx/mlx.c mlx/event.c vecteur/vecteur.c vecteur/projectile.c
+OBJ = $(SRCS:.c=.o)
 
-# Objets
-OBJS = $(SRCS:.c=.o)
+LIBS = $(LIBFT_DIR)/libft.a $(FT_PRINTF_DIR)/libftprintf.a $(GNL_DIR)/libgnl.a
 
-# Compiler les bibliothèques et le programme
-$(NAME): libft gnl ft_printf $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBS) $(INCLUDES)
+all: $(NAME)
 
-# Compiler les bibliothèques
-libft:
+$(NAME): $(OBJ) $(LIBS)
+	$(CC) $(OBJ) -o $(NAME) $(LIBS) $(MLX_FLAGS) $(INC_FLAGS)
+
+$(LIBFT_DIR)/libft.a:
 	make -C $(LIBFT_DIR)
 
-gnl:
-	make -C $(GNL_DIR)
-
-ft_printf:
+$(FT_PRINTF_DIR)/libftprintf.a:
 	make -C $(FT_PRINTF_DIR)
 
-# Nettoyage des fichiers compilés
-clean:
-	rm -f $(OBJS)
-	make -C $(LIBFT_DIR) clean
-	make -C $(GNL_DIR) clean
-	make -C $(FT_PRINTF_DIR) clean
+$(GNL_DIR)/libgnl.a:
+	make -C $(GNL_DIR)
 
-# Nettoyage complet, y compris les bibliothèques
+# Règle pour nettoyer les objets
+clean:
+	rm -f $(OBJ)
+	make -C $(LIBFT_DIR) clean
+	make -C $(FT_PRINTF_DIR) clean
+	make -C $(GNL_DIR) clean
+
+# Règle pour nettoyer tout ce qui est compilé
 fclean: clean
 	rm -f $(NAME)
 	make -C $(LIBFT_DIR) fclean
-	make -C $(GNL_DIR) fclean
 	make -C $(FT_PRINTF_DIR) fclean
+	make -C $(GNL_DIR) fclean
 
-# Règle pour refaire tout
 re: fclean all
-
-# Empêcher les conflits de nom
-.PHONY: all clean fclean re libft gnl ft_printf

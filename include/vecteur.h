@@ -8,9 +8,10 @@ typedef struct s_tuple
     double x;
     double y;
     double z;
-    double w; // 1.0 pour un point, 0.0 pour un vecteur
+    double w;
 } t_tuple;
 
+double dot(t_vec3 a, t_vec3 b);
 t_tuple point(double x, double y, double z);
 t_tuple vector(double x, double y, double z);
 t_tuple add_tuples(t_tuple a1, t_tuple a2);
@@ -20,5 +21,6 @@ t_tuple negate_tuple(t_tuple a);
 t_tuple multiply_tuple(t_tuple a, double scalar);
 t_tuple normalize_tuple(t_tuple a);
 t_tuple cross_product(t_tuple a, t_tuple b);
+t_vec3 subtract_vectors(t_vec3 a, t_vec3 b);
 
 #endif

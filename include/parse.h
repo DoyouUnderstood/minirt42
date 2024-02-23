@@ -4,10 +4,11 @@
 #include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include "../lib/mlx/mlx/mlx.h"
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include "../lib/mlx/mlx.h"
+#include <math.h>
 
 typedef struct s_rgb
 {
@@ -60,7 +61,7 @@ typedef struct s_object
 
 typedef struct s_obj_list
 {
-	t_object *head; // Pointeur vers le premier objet de la liste
+	t_object *head;
 }					t_obj_list;
 
 typedef struct s_plane
@@ -84,7 +85,6 @@ typedef struct s_cyl
 	double			diameter;
 	double			height;
 	t_rgb			color;
-
 }					t_cyl;
 
 typedef struct s_scene
@@ -108,7 +108,6 @@ void parse_object(char **ptr, t_obj_list *objects);
 
 /* =========== Parseur utils ========== */
 
-t_scene 			check_and_fill(char **argv);
 void				error_exit(const char *error);
 bool				in_range(double start, double end, double value);
 double				ft_strtod(char *s);
