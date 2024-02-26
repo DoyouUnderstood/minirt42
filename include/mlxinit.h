@@ -3,6 +3,9 @@
 
 //#include "parse.h"
 #include "vecteur.h"
+#include <unistd.h>
+#include <stdlib.h>
+#include "../lib/mlx/mlx.h"
 
 typedef struct s_mlx
 {

@@ -17,7 +17,7 @@ void parse_camera(char **parts, t_camera *camera)
 {
 
     double fov;
-    t_vec3 orientation;
+    t_tuple orientation;
     if (!parse_vec3(parts[1], &camera->pos))
         error_exit("error with parsing\n");
     if (!parse_vec3(parts[2], &orientation))
@@ -32,7 +32,7 @@ void parse_camera(char **parts, t_camera *camera)
         camera->fov = fov;
 }
 
-int parse_vec3(char *str, t_vec3 *vec) 
+int parse_point(char *str, t_tuple *vec) 
 {
     int count = 0;
     char *next;
@@ -49,6 +49,28 @@ int parse_vec3(char *str, t_vec3 *vec)
     count++;
     vec->z = ft_strtod(str);
     count++;
+    vec->w = 1;
+    return (count == 3);
+}
+
+int parse_vec3(char *str, t_tuple *vec) 
+{
+    int count = 0;
+    char *next;
+
+    vec->x = ft_strtod(str);
+    next = advance_to_next_component(&str);
+    if (!next) 
+        return (0);
+    count++;
+    vec->y = ft_strtod(str);
+    next = advance_to_next_component(&str);
+    if (!next) 
+        return (0);
+    count++;
+    vec->z = ft_strtod(str);
+    count++;
+    vec->w = 0;
     return (count == 3);
 }
 

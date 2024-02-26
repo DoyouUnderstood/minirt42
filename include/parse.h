@@ -9,6 +9,7 @@
 #include <unistd.h>
 #include "../lib/mlx/mlx.h"
 #include <math.h>
+#include "vecteur.h"
 
 typedef struct s_rgb
 {
@@ -17,12 +18,12 @@ typedef struct s_rgb
 	int				b;
 }					t_rgb;
 
-typedef struct s_vec3
-{
-	double			x;
-	double			y;
-	double			z;
-}					t_vec3;
+// typedef struct s_vec3
+// {
+// 	double			x;
+// 	double			y;
+// 	double			z;
+// }					t_tuple;
 
 typedef struct s_amb_light
 {
@@ -32,15 +33,15 @@ typedef struct s_amb_light
 
 typedef struct s_light
 {
-	t_vec3			position;
+	t_tuple			position;
 	double			brightness;
 	t_rgb			color;
 }					t_light;
 
 typedef struct s_camera
 {
-	t_vec3			pos;
-	t_vec3			orientation;
+	t_tuple			pos;
+	t_tuple			orientation;
 	double			fov;
 }					t_camera;
 
@@ -66,22 +67,22 @@ typedef struct s_obj_list
 
 typedef struct s_plane
 {
-	t_vec3			center;
-	t_vec3			orientation;
+	t_tuple			center;
+	t_tuple			orientation;
 	t_rgb			color;
 }					t_plane;
 
 typedef struct s_sphere
 {
-	t_vec3			center;
+	t_tuple			center;
 	double			diameter;
 	t_rgb			color;
 }					t_sphere;
 
 typedef struct s_cyl
 {
-	t_vec3			center;
-	t_vec3			orientation;
+	t_tuple			center;
+	t_tuple			orientation;
 	double			diameter;
 	double			height;
 	t_rgb			color;
@@ -114,8 +115,8 @@ double				ft_strtod(char *s);
 bool				valid_bright(double bright);
 int					ft_atod(const char *str, double *nbr);
 void				ft_free_split(char **array);
-int					parse_vec3(char *str, t_vec3 *vec);
-int					validate_orientation(const t_vec3 *orientation);
+int					parse_vec3(char *str, t_tuple *vec);
+int					validate_orientation(const t_tuple *orientation);
 double				parse_fov(char *str);
 char				**ft_split(char const *s, char c);
 double				ft_pow(double base, int exp);

@@ -9,10 +9,15 @@ typedef struct s_ray
     t_tuple direction; // La direction du rayon
 } t_ray;
 
-typedef struct 
-{
+typedef struct {
+    void *object; // Un pointeur vers l'objet intersecté
+    double t;     // La valeur t de l'intersection
+} t_intersection;
+
+typedef struct {
     int count;
-    double t[2];
+    t_intersection *intersections; // Un tableau dynamique d'intersections
 } t_intersections;
+
 
 #endif 

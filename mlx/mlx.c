@@ -69,7 +69,7 @@ void draw_square(t_mlx *mlx, int x, int y, int size, int color)
     }
 }
 
-void draw_vector(t_mlx *mlx, t_vec3 *vec, int color)
+void draw_vector(t_mlx *mlx, t_tuple *vec, int color)
 {
     int i;
     int j;

@@ -1,7 +1,7 @@
 #ifndef VECTEUR_H
 #define VECTEUR_H
 
-#include "parse.h"
+// #include "parse.h"
 
 typedef struct s_tuple
 {
@@ -11,7 +11,7 @@ typedef struct s_tuple
     double w;
 } t_tuple;
 
-double dot(t_vec3 a, t_vec3 b);
+double dot(t_tuple a, t_tuple b);
 t_tuple point(double x, double y, double z);
 t_tuple vector(double x, double y, double z);
 t_tuple add_tuples(t_tuple a1, t_tuple a2);
@@ -21,6 +21,6 @@ t_tuple negate_tuple(t_tuple a);
 t_tuple multiply_tuple(t_tuple a, double scalar);
 t_tuple normalize_tuple(t_tuple a);
 t_tuple cross_product(t_tuple a, t_tuple b);
-t_vec3 subtract_vectors(t_vec3 a, t_vec3 b);
+t_tuple subtract_vectors(t_tuple a, t_tuple b);
 
 #endif

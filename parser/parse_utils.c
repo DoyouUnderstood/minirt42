@@ -13,7 +13,7 @@ double ft_pow(double base, int exp)
     return result;
 }
 
-int validate_orientation(const t_vec3 *orientation)
+int validate_orientation(const t_tuple *orientation)
 {
     double len = sqrt(orientation->x * orientation->x + orientation->y * orientation->y + orientation->z * orientation->z);
     if (fabs(len - 1.0) > 1e-6)

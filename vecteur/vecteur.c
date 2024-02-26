@@ -17,9 +17,10 @@ t_tuple point(double x, double y, double z) {
     return (t_tuple){x, y, z, 1.0};
 }
 
-double dot(t_vec3 a, t_vec3 b) {
+double dot(t_tuple a, t_tuple b) {
     return a.x * b.x + a.y * b.y + a.z * b.z;
 }
+
 
 // Fonction pour créer un vecteur
 t_tuple vector(double x, double y, double z) {
@@ -31,7 +32,7 @@ t_tuple add_tuples(t_tuple a1, t_tuple a2) {
     result.x = a1.x + a2.x;
     result.y = a1.y + a2.y;
     result.z = a1.z + a2.z;
-    result.w = 1.0; // Assurez-vous que le résultat est traité comme un point
+    result.w = 1.0;
     return result;
 }
 
@@ -54,13 +55,15 @@ t_tuple subtract_tuples(t_tuple a1, t_tuple a2)
 }
 
 // Implémentation de la fonction subtract_vectors
-t_vec3 subtract_vectors(t_vec3 a, t_vec3 b) {
-    t_vec3 result;
+t_tuple subtract_vectors(t_tuple a, t_tuple b) {
+    t_tuple result;
     result.x = a.x - b.x;
     result.y = a.y - b.y;
     result.z = a.z - b.z;
+    result.w = a.w - b.w; // Gère la composante w, distinction entre points et vecteurs
     return result;
 }
+
 
 
 t_tuple negate_tuple(t_tuple a)
