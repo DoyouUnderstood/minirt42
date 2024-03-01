@@ -42,7 +42,6 @@ void sort_intersections(t_intersections *intersections) {
 
 
 // intersect_sphere: Calcule les intersections d'un rayon avec une sphère, renvoyant un ensemble d'intersections.
-
 t_intersections intersect_sphere(t_sphere sphere, t_ray ray) {
     t_tuple sphere_to_ray = subtract_tuples(ray.origin, vector(sphere.center.x, sphere.center.y, sphere.center.z));
     double a = dot(ray.direction, ray.direction);
